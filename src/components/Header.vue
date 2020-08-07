@@ -1,12 +1,12 @@
 <template>
-  <header class="header">
+  <header :class="`header mobile_${isMobile}`">
     <span class="header__title">Курс {{base}} сегодня</span>
 
     <VueSlickCarousel
       class="header__tabs"
       ref="headerTabs"
       :arrows="true"
-      :slidesToShow="7"
+      :slidesToShow="isMobile ? 3 : 7"
       :infinite="false"
       :swipeToSlide="true"
     >
@@ -16,17 +16,19 @@
           @click="prevTab"
         ><img src="../assets/chevron-right.svg" alt=""></button>
       </template>
+
       <template #nextArrow="arrowOption">
         <button
           class="next"
           @click="nextTab"
         ><img src="../assets/chevron-right.svg" alt=""></button>
       </template>
+
       <button
-        v-for="cur in Object.keys(rates)"
+        v-for="cur in Object.keys(this.rates).sort()"
         :class="`tab tab_active_${base === cur}`"
-      >{{cur}}
-      </button>
+        @click="() => onChangeBase(cur)"
+      >{{cur}}</button>
     </VueSlickCarousel>
   </header>
 </template>
@@ -49,6 +51,11 @@
         type: String,
         required: true
       },
+      onChangeBase: {
+        type: Function,
+        required: true
+      },
+      isMobile: Boolean
     },
     mounted() {
       this.goToBase();
@@ -61,8 +68,8 @@
         this.$refs.headerTabs.prev();
       },
       goToBase() {
-        this.$refs.headerTabs.goTo(Object.keys(this.rates).indexOf(this.base) - 3);
-      }
+        this.$refs.headerTabs.goTo(Object.keys(this.rates).sort().indexOf(this.base) - (this.isMobile ? 1 : 3));
+      },
     }
   }
 </script>
@@ -100,7 +107,6 @@
     width: 90px;
     height: 48px;
     padding: 0;
-    font-family: 'Roboto Medium', sans-serif;
     font-weight: 500;
     font-size: 14px;
     line-height: 16px;

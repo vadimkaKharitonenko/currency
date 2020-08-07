@@ -12,11 +12,11 @@ const mutations = {
 };
 
 const actions = {
-  async fetchCurrencies({commit}) {
-    const res = await fetch('https://api.exchangeratesapi.io/latest?base=EUR')
+  fetchCurrency: async (context, payload) => {
+    const res = await fetch(`https://api.exchangeratesapi.io/latest?base=${payload.currency}`)
       .then(res => res.json())
-      .catch(_ => commit('SET_CURRENCIES', false));
-    if (res) return commit('SET_CURRENCIES', {...res, rates: {...res.rates, 'EUR': 'BASE'}});
+      .catch(_ => context.commit('SET_CURRENCIES', false));
+    if (res) return context.commit('SET_CURRENCIES', {...res, rates: {...res.rates, [payload.currency]: 'BASE'}});
   },
 };
 
