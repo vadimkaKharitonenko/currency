@@ -1,5 +1,5 @@
 <template>
-  <div :class="`rate size_${size} mobile_${getWidth < 730}`">
+  <div :class="`rate size_${size} mobile_${isMobile}`">
     <p class="rate__label">
       {{value}}
       <span>{{base}} =</span>
@@ -33,16 +33,12 @@
         return (this.currency[1] * this.value).toFixed(2).toString().replace('.', ',')
       },
       size() {
-        if (this.calculatedValue.length < 7) {
-          return 'L';
-        } else if (this.calculatedValue.length < 13) {
-          return 'M';
-        } else {
-          return 'S';
-        }
+        if (this.calculatedValue.length < 7) return 'L';
+        if (this.calculatedValue.length < 13) return 'M';
+        return 'S';
       },
-      getWidth() {
-        return store.getters.getScreenWidth;
+      isMobile() {
+        return store.getters.getScreenWidth < 730;
       }
     }
   }
@@ -51,8 +47,8 @@
 <style scoped>
   .rate {
     padding: 18px 30px 17px;
-    background: #FFFFFF;
-    box-shadow: 0px 3px 6px rgba(157, 157, 157, 0.16);
+    background: white;
+    box-shadow: 0 3px 6px rgba(157, 157, 157, 0.16);
     border-radius: 12px;
   }
 
@@ -62,11 +58,11 @@
     font-weight: 300;
     font-size: 24px;
     line-height: 28px;
-    color: #2B2D33;
+    color: var(--color-black);
   }
 
   .rate__label span {
-    color: #B9B9B9;
+    color: var(--color-gray);
   }
 
   .rate__value {
@@ -75,7 +71,7 @@
     font-weight: 300;
     font-size: 48px;
     line-height: 56px;
-    color: #2B2D33;
+    color: var(--color-black);
     white-space: nowrap;
   }
 
@@ -112,7 +108,8 @@
   }
 
   .rate.size_S .rate__label,
-  .rate.size_S .rate__value {
+  .rate.size_S .rate__value,
+  .rate.size_S .rate__value span {
     font-size: 16px;
   }
 

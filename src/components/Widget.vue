@@ -1,5 +1,5 @@
 <template>
-  <section :class="`widget mobile_${getWidth < 730}`">
+  <section :class="`widget mobile_${isMobile}`">
     <p
       v-if="!rates"
       class="widget__error"
@@ -13,13 +13,11 @@
         :base="base"
         :rates="rates"
         :onChangeBase="this.changeBase"
-        :isMobile="getWidth < 730"
       />
 
       <Rates
         :base="base"
         :rates="Object.entries(rates).filter(item => item[0] !== base)"
-        :isMobile="getWidth < 730"
       />
     </div>
   </section>
@@ -50,8 +48,8 @@
       base() {
         return store.getters.getBase;
       },
-      getWidth() {
-        return store.getters.getScreenWidth;
+      isMobile() {
+        return store.getters.getScreenWidth < 730;
       }
     },
     methods: {

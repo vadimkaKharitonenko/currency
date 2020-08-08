@@ -58,6 +58,7 @@
 </template>
 
 <script>
+  import {store} from '../store';
   import Rate from './Rate';
   import VueSlickCarousel from 'vue-slick-carousel';
   import 'vue-slick-carousel/dist/vue-slick-carousel.css';
@@ -74,7 +75,6 @@
         required: true
       },
       rates: Array,
-      isMobile: Boolean
     },
     data() {
       return {
@@ -92,6 +92,9 @@
         }
 
         return result;
+      },
+      isMobile() {
+        return store.getters.getScreenWidth < 730
       }
     },
     methods: {
@@ -117,7 +120,6 @@
     display: grid;
     grid-template-rows: repeat(3, max-content);
     grid-row-gap: 23px;
-    height: 471px;
     padding: 29px 24px 24px;
     background-color: #FFFFFF;
   }
@@ -143,25 +145,25 @@
     line-height: 16px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: #2B2D33;
+    color: var(--color-black);
     background-color: transparent;
-    border: none;
     box-shadow: 0 5px 6px rgba(157, 157, 157, 0.16);
     border-radius: 8px;
+    border: none;
     outline: none;
     user-select: none;
     cursor: pointer;
   }
 
   .rates__controls .disabled {
-    background-color: #EFEFEF;
-    color: #787878;
+    background-color: var(--bg-gray);
+    color: var(--color-gray-dark);
     box-shadow: unset;
     pointer-events: none;
   }
 
   .rates__controls .disabled path {
-    fill: #787878;
+    fill: var(--color-gray-dark);
   }
 
   .prev svg {
@@ -170,7 +172,7 @@
 
   .prev path,
   .next path {
-    fill: #282828;
+    fill: var(--color-black-dark);
   }
 
   .rates__field {
@@ -183,7 +185,7 @@
     font-weight: normal;
     font-size: 18px;
     line-height: 21px;
-    color: #2B2D33;
+    color: var(--color-black);
   }
 
   .rates__input {
@@ -197,7 +199,7 @@
 
   .rates__base {
     margin-left: 4px;
-    color: #B9B9B9;
+    color: var(--color-gray);
   }
 
   .rates__list {

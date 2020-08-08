@@ -9,9 +9,11 @@
       :slidesToShow="isMobile ? 3 : 7"
       :infinite="false"
       :swipeToSlide="true"
+      @beforeChange="onChangeSlide"
     >
       <template #prevArrow="arrowOption">
         <button
+          v-show="currentSlide !== 0"
           class="prev"
           @click="prevTab"
         ><img src="../assets/chevron-right.svg" alt=""></button>
@@ -19,6 +21,7 @@
 
       <template #nextArrow="arrowOption">
         <button
+          v-show="currentSlide !== Object.keys(rates).length - 2"
           class="next"
           @click="nextTab"
         ><img src="../assets/chevron-right.svg" alt=""></button>
@@ -34,6 +37,7 @@
 </template>
 
 <script>
+  import {store} from '../store';
   import VueSlickCarousel from 'vue-slick-carousel';
   import 'vue-slick-carousel/dist/vue-slick-carousel.css';
 
@@ -55,7 +59,11 @@
         type: Function,
         required: true
       },
-      isMobile: Boolean
+    },
+    data() {
+      return {
+        currentSlide: 5
+      }
     },
     mounted() {
       this.goToBase();
@@ -70,6 +78,14 @@
       goToBase() {
         this.$refs.headerTabs.goTo(Object.keys(this.rates).sort().indexOf(this.base) - (this.isMobile ? 1 : 3));
       },
+      onChangeSlide(_, index) {
+        this.currentSlide = index;
+      }
+    },
+    computed: {
+      isMobile() {
+        return store.getters.getScreenWidth < 730;
+      }
     }
   }
 </script>
@@ -79,7 +95,7 @@
     width: 100%;
     height: 111px;
     padding-top: 30px;
-    background-color: #FFE782;
+    background-color: var(--color-gold);
     box-sizing: border-box;
   }
 
@@ -89,7 +105,7 @@
     font-weight: normal;
     font-size: 21px;
     line-height: 25px;
-    color: #2B2D33;
+    color: var(--color-black);
   }
 
   .header__tabs {
@@ -110,7 +126,7 @@
     font-weight: 500;
     font-size: 14px;
     line-height: 16px;
-    color: #CCAE68;
+    color: var(--color-gold-dark);
     border: none;
     border-radius: 10px 10px 0 0;
     background-color: transparent;
@@ -119,12 +135,12 @@
   }
 
   .header__tabs .tab.tab_active_true {
-    background-color: #FFFFFF;
-    color: #2B2D33;
+    background-color: white;
+    color: var(--color-black);
   }
 
-  .next,
-  .prev {
+  .header .next,
+  .header .prev {
     padding: 0;
     border: none;
     background-color: transparent;
